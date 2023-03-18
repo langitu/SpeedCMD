@@ -2,6 +2,36 @@
 
 命令行测速、测延迟工具
 
+## 使用方法
+
+### 1. 下载对应平台的可执行文件压缩包并解压缩
+
+[release](./releases)
+
+### 2. 启动 server 端
+
+> 以 window 平台为例
+
+```sh
+# 默认监听22端口
+./speedcmd server
+
+# 或者指定端口
+./speedcmd server -p 8080
+```
+
+### 3. 客户端测试
+
+> 以 window 平台为例
+
+```sh
+# 默认访问 localhost:22
+./speedcmd client
+
+# 也可修改host和port
+./speedcmd client -h localhost -p 22
+```
+
 ## 发布项目
 
 ```sh
