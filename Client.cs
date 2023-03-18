@@ -1,0 +1,65 @@
+using System.Diagnostics;
+using System.Net;
+using System.Net.Sockets;
+using System.Text;
+
+namespace SpeedCMD;
+
+public class Client
+{
+  public Client(int port, string host)
+  {
+    Port = port;
+    Host = host;
+    _ip = IPAddress.Parse(Host);
+    _ipe = new IPEndPoint(_ip, Port);
+  }
+
+  private IPAddress _ip;
+  private IPEndPoint _ipe;
+  private static byte[] _sendBytes = Encoding.ASCII.GetBytes("hello!This is a socket test");
+  private static byte[] _recvBytes = new byte[1024];
+
+  public int Port { get; }
+  public string Host { get; }
+
+  public void Connect()
+  {
+    var stopwatch = new Stopwatch();
+    try
+    {
+      var c = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+      Console.WriteLine("Conneting…");
+      stopwatch.Restart();
+      c.Connect(_ipe);
+      stopwatch.Stop();
+      System.Console.WriteLine($"连接到服务器耗时：{stopwatch.ElapsedMilliseconds}ms");
+
+      var list = new List<long>(10);
+      for (int i = 0; i < list.Capacity; i++)
+      {
+        Console.WriteLine("Send Message");
+        stopwatch.Restart();
+        c.Send(_sendBytes, _sendBytes.Length, 0);
+        c.Receive(_recvBytes, _recvBytes.Length, 0);
+        stopwatch.Stop();
+        System.Console.WriteLine($"{i + 1} 收发消息耗时：{stopwatch.ElapsedMilliseconds}ms");
+        list.Add(stopwatch.ElapsedMilliseconds);
+        Thread.Sleep(100);
+      }
+      c.Close();
+      list.Sort();
+      list.RemoveAt(list.Count - 1);
+      list.RemoveAt(0);
+      System.Console.WriteLine($"平均耗时：{Math.Round(list.Average(), 2)}ms");
+    }
+    catch (ArgumentNullException e)
+    {
+      Console.WriteLine("argumentNullException: {0}", e);
+    }
+    catch (SocketException e)
+    {
+      Console.WriteLine("SocketException:{0}", e);
+    }
+  }
+}
