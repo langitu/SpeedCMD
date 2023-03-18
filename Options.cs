@@ -1,4 +1,3 @@
-
 using CommandLine;
 
 namespace SpeedCMD;
