@@ -28,7 +28,8 @@ public class Client
     var stopwatch = new Stopwatch();
     try
     {
-      var c = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+      var c = new Socket(AddressFamily.InterNetworkV6, SocketType.Stream, ProtocolType.Tcp);
+      c.SetSocketOption(SocketOptionLevel.IPv6, SocketOptionName.IPv6Only, false);
       Console.WriteLine("连接中...");
       stopwatch.Restart();
       c.Connect(_ipe);
