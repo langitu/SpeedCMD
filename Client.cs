@@ -11,7 +11,7 @@ public class Client
   {
     Port = port;
     Host = host;
-    _ip = IPAddress.Parse(Host);
+    _ip = Dns.GetHostAddresses(host).First();
     _ipe = new IPEndPoint(_ip, Port);
   }
 
@@ -29,16 +29,15 @@ public class Client
     try
     {
       var c = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-      Console.WriteLine("Conneting…");
+      Console.WriteLine("连接中...");
       stopwatch.Restart();
       c.Connect(_ipe);
       stopwatch.Stop();
-      System.Console.WriteLine($"连接到服务器耗时：{stopwatch.ElapsedMilliseconds}ms");
+      System.Console.WriteLine($"连接成功！耗时：{stopwatch.ElapsedMilliseconds}ms");
 
       var list = new List<long>(10);
       for (int i = 0; i < list.Capacity; i++)
       {
-        Console.WriteLine("Send Message");
         stopwatch.Restart();
         c.Send(_sendBytes, _sendBytes.Length, 0);
         c.Receive(_recvBytes, _recvBytes.Length, 0);
