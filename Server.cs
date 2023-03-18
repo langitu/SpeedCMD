@@ -1,4 +1,3 @@
-
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
@@ -16,7 +15,7 @@ public class Server
   private const string _sendStr = "ok!Client send message successful!";
   private static byte[] _sendBytes = Encoding.ASCII.GetBytes(_sendStr);
   private static byte[] _recvBytes = new byte[1024];
-  private const string _host = "0.0.0.0";
+  private const string _host = "[::]";
   private static IPAddress _ip = IPAddress.Parse(_host);
 
   public int Port { get; }
@@ -26,10 +25,11 @@ public class Server
   public void Start()
   {
     var cancellationTokenSource = new CancellationTokenSource();
-    var s = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+    var s = new Socket(AddressFamily.InterNetworkV6, SocketType.Stream, ProtocolType.Tcp);
+    s.SetSocketOption(SocketOptionLevel.IPv6, SocketOptionName.IPv6Only, false);
     s.Bind(_ipe);
     s.Listen(0);
-    Console.WriteLine("等待客户端连接");
+    Console.WriteLine("服务端已就绪，正在监听{0}端口...", Port);
     try
     {
       do
@@ -48,7 +48,7 @@ public class Server
            }
            catch (SocketException e)
            {
-             Console.WriteLine("SocketException:{0}", e);
+             Console.WriteLine("SocketException:{0}", e.Message);
            }
            finally
            {
