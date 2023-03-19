@@ -8,8 +8,11 @@ var clientCommand = new Command("client", "使用客户端");
 rootCommand.AddCommand(serverCommand);
 rootCommand.AddCommand(clientCommand);
 
+var hostArgument = new Argument<string>("host", "远程主机或IP");
+hostArgument.SetDefaultValue("127.0.0.1");
+
 // common options
-var portOption = new Option<int>("--port", "设置程序监听或访问的端口");
+var portOption = new Option<int>("--port", "程序监听或访问的端口");
 portOption.AddAlias("-p");
 portOption.SetDefaultValue(22);
 portOption.AddValidator(result =>
@@ -24,13 +27,14 @@ portOption.AddValidator(result =>
 //...
 
 // client options
-var hostOption = new Option<string>("--host", "设置远程主机或IP");
+var hostOption = new Option<string>("--host", "远程主机或IP");
 hostOption.SetDefaultValue("127.0.0.1");
 
-serverCommand.AddOption(portOption);
-clientCommand.AddOption(portOption);
+rootCommand.AddGlobalOption(portOption);
+rootCommand.AddArgument(hostArgument);
 clientCommand.AddOption(hostOption);
 
+rootCommand.SetHandler(DoClientCommand, portOption, hostArgument);
 serverCommand.SetHandler(DoServerCommand, portOption);
 clientCommand.SetHandler(DoClientCommand, portOption, hostOption);
 
