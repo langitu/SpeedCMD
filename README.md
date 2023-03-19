@@ -6,7 +6,7 @@
 
 ### 1. 下载对应平台的可执行文件压缩包并解压缩
 
-[release](./releases)
+[release](https://github.com/langitu/SpeedCMD.git)
 
 ### 2. 启动 server 端
 
