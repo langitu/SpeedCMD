@@ -59,7 +59,7 @@ public class Client
     }
     catch (SocketException e)
     {
-      Console.WriteLine("SocketException:{0}", e);
+      Console.WriteLine("SocketException:{0}", e.Message);
     }
   }
 }
