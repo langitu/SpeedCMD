@@ -29,7 +29,7 @@
 ./speedcmd client
 
 # 也可修改host和port
-./speedcmd client -h localhost -p 22
+./speedcmd client --host localhost -p 22
 ```
 
 ## 发布项目
